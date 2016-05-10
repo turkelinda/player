@@ -1,0 +1,5 @@
+/*
+ **  msg TV Player
+ **  Design und Entwicklung von msg systems ag (http://www.msg-systems.com/)
+ **  Copyright (c) 2015 msg systems ag (http://www.msg-systems.com/)
+ */
