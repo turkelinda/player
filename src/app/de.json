@@ -1,0 +1,7 @@
+{
+    "appService": {
+        "error": {
+            "parse": "Unerwarteter Fehler beim Einlesen der Serverantwort.\nhttp statuscode %d.\nEine vollständige Textausgabe der Serverantwort steht in der Konsole -- %s"
+        }
+    }
+}

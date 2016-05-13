@@ -1,0 +1,3 @@
+package: "app.trait.root.businessservices"
+id: "appTraitBusinessService"
+desc: "Kapselt die Business Services der Root Komponente"

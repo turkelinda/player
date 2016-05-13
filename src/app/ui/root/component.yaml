@@ -1,0 +1,42 @@
+package: "app.root"
+id: "appRoot"
+desc: "Die Root-Komponente der Anwendung. Anwendungsrahmen, Service-Kommunikation, ModalDialoge, Einstellungen und vieles
+       mehr werden von hier verwaltet. Um den Code der Komponente überschaubar und wartbar zu halten, werden viele
+       Funktionen in 'traits' ausgelagert und durch den 'mixin' Mechanismus in die Komponente hinzugemischt.
+       Die Root-Komponente hängt sich direkt in den body der HTML Seite ein."
+interface:
+  api:
+    call:
+      whoAmI:
+        desc: "Serviceaufruf um den aktuell angemeldeten Benutzer anzufragen."
+        part: "service"
+  events:
+    publish:
+      toParent:
+        contentReady:
+          desc: "Informiert den Rahmen, dass der Inhalt der Anwendung bereit für die Benutzung ist"
+  model:
+    define:
+      global:
+        data:
+          currentUser:
+            desc: "Der aktuell angemeldete Benutzer wird hier zur Verfügung gestellt. Viele Komponenten benötigen Daten
+                   des aktuellen Nutzers und können über einen entsprechenden observer Zugriff erlangen."
+            param: "Object - in der Regel das Entitätsobject der Klasse 'User' welches den aktuellen Benutzer beschreibt."
+    observe:
+      global:
+        data:
+          currentUser:
+            part: "Controller"
+            desc: "Sollte sich der aktuelle Benutzer ändern werden alle benutzerabhängigen Objekte synchron im Anschluss geladen.
+                   Sofern der Benutzer sich erneut geändert hätte, wird die Anwendung beendet um Komplikationen durch unterschiediche
+                   Berechtigungen und bereits geladenen Daten des alten Nutzers zu vermeiden. Theoretisch kann ein Relogin als anderer
+                   Benutzer nicht vorkommen."
+            param: "Object - in der Regel das Entitätsobject der Klasse 'User' welches den aktuellen Benutzer beschreibt."
+  ui:
+    socket:
+      default:
+        desc: "Der Defaultsocket wird in den Anwendungscontainer verlinkt"
+      header:
+        part: "Scope"
+        desc: "Der Defaultsocket für die Komponente 'header' als gescoped'ter Socket"

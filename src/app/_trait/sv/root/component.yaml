@@ -1,0 +1,11 @@
+package: "app.trait.sv.root"
+desc: "Trait für die Service Implementierung
+       Die Komponente Root benötigt eine Liste an Services (siehe interface)"
+interface:
+  api:
+    register:
+      whoAmI:
+        desc: "Fragt das Backend nach dem aktuell angemeldetem Benutzer."
+        param: "Es gibt keine Übergabeparameter.
+                Als Ergebnis wird ein Objekt der Entität 'User' erwartet."
+        part: "POST /loginController/whoAmI"

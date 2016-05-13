@@ -19,24 +19,61 @@ module.exports = function (grunt) {
                 ]
             }
         },
+        babel: {
+            "app": {
+                options: {
+                    sourceMap: true,
+                    "plugins": [
+                        "transform-es2015-arrow-functions",
+                        "transform-es2015-block-scoped-functions",
+                        "transform-es2015-block-scoping",
+                        "transform-es2015-classes",
+                        "transform-es2015-computed-properties",
+                        "check-es2015-constants",
+                        "transform-es2015-destructuring",
+                        "transform-es2015-for-of",
+                        "transform-es2015-function-name",
+                        "transform-es2015-literals",
+                        "transform-es2015-object-super",
+                        "transform-es2015-parameters",
+                        "transform-es2015-shorthand-properties",
+                        "transform-es2015-spread",
+                        "transform-es2015-sticky-regex",
+                        "transform-es2015-template-literals",
+                        "transform-es2015-typeof-symbol",
+                        "transform-es2015-unicode-regex",
+                        "transform-regenerator"
+                    ]
+                },
+                files: [
+                    {
+                        expand: true,
+                        cwd: 'tmp/stage1/app/',
+                        src: ['**/*.js'],
+                        dest: 'tmp/stage2/app/',
+                        ext: ".js"
+                    }
+                ]
+            }
+        },
         uglify: {
             "app-boot": {
-                src: ["tmp/stage1/app/boot.js",
-                    "tmp/stage1/app/_trait/**/*.js",
-                    "tmp/stage1/app/sv.js",
-                    "tmp/stage1/app/data/**/*.js",
-                    "tmp/stage1/app/dataObjects/**/*.js"],
+                src: ["tmp/stage2/app/boot.js",
+                    "tmp/stage2/app/_trait/**/*.js",
+                    "tmp/stage2/app/sv.js",
+                    "tmp/stage2/app/data/**/*.js",
+                    "tmp/stage2/app/dataObjects/**/*.js"],
                 dest: "www/app/boot.js",
                 options: {}
             },
             "app-core": {
                 src: [
-                    "tmp/stage1/app/**/*.js",
-                    "!tmp/stage1/app/boot.js",
-                    "!tmp/stage1/app/_trait/**/*.js",
-                    "!tmp/stage1/app/sv.js",
-                    "!tmp/stage1/app/data/**/*.js",
-                    "!tmp/stage1/app/dataObjects/**/*.js"
+                    "tmp/stage2/app/**/*.js",
+                    "!tmp/stage2/app/boot.js",
+                    "!tmp/stage2/app/_trait/**/*.js",
+                    "!tmp/stage2/app/sv.js",
+                    "!tmp/stage2/app/data/**/*.js",
+                    "!tmp/stage2/app/dataObjects/**/*.js"
                 ],
                 dest: "www/app/app.js",
                 options: {}
@@ -83,7 +120,7 @@ module.exports = function (grunt) {
                 files: [
                     {
                         expand: true,
-                        cwd: "tmp/stage1/app",
+                        cwd: "tmp/stage2/app",
                         src: ["**/*.js"],
                         dest: "www/app"
                     },
@@ -100,7 +137,7 @@ module.exports = function (grunt) {
                 files: [
                     {
                         expand: true,
-                        cwd: "tmp/stage1/app",
+                        cwd: "tmp/stage2/app",
                         src: ["**/*.js.map"],
                         dest: "www/app"
                     },
@@ -151,7 +188,7 @@ module.exports = function (grunt) {
                 ],
                 overwrite: true,
                 replacements: [
-                    {from: "node_modules/jbit7-framework", to: "../node_modules/jbit7-framework"}
+                    {from: "node_modules/msg-js-spa-framework", to: "../node_modules/msg-js-spa-framework"}
                 ]
             },
             "app-css": {
@@ -200,18 +237,26 @@ module.exports = function (grunt) {
             "app-markup": {files: ["src/app/**/*.html"], tasks: ["app-markup", "copy:app-source"]},
             "appDev-markup": {files: ["src/app/**/*.html"], tasks: ["app-markup", "copy:app-source", "includeSource"]},
             "copy-statics": {files: ["src/*.*"], tasks: ["copy:app-static"]},
-            "copy-assets": {files: ["src/assets/**/*.*"], tasks: ["copy:app-assets"]},
+            "copy-assets": {files: ["src/assets/**/*.*"], tasks: ["copy:app-assets"]}
+        },
+        includeSource: {
+            options: {
+                basePath: 'www'
+            },
+            indexFile: {
+                files: {
+                    'www/index.html': 'src/index.template.html'
+                }
+            }
         }
     });
 
-    grunt.registerTask("app-code", ["placeholder:app", "jshint:app", "uglify:app-boot", "uglify:app-core", "concat:app-boot", "concat:app-core", "replace:app-sourcemap"]);
-    grunt.registerTask("appDev-code", ["placeholder:app", "jshint:app", "uglify:app-boot", "replace:app-sourcemap"]);
+    grunt.registerTask("app-code", ["placeholder:app", "jshint:app", "babel:app", "uglify:app-boot", "uglify:app-core", "concat:app-boot", "concat:app-core", "replace:app-sourcemap"]);
+    grunt.registerTask("appDev-code", ["placeholder:app", "jshint:app", "babel:app", "uglify:app-boot", "replace:app-sourcemap"]);
     grunt.registerTask("app-i18n", ["placeholder:i18n", "merge-json:i18n-de", "merge-json:i18n-en"]);
     grunt.registerTask("app-style", ["placeholder:less", "replace:stage1-less", "less:app", "concat:app-css", "replace:app-css"]);
     grunt.registerTask("app-markup", ["placeholder:html", "concat:app-markup"]);
 
-    grunt.registerTask('test', ["placeholder:app", "mochaTest:specReport"]);
-    grunt.registerTask('testdrive', ["placeholder:app", "mochaTest:testdrive"]);
 
     grunt.registerTask("app", ["app-code", "app-i18n", "app-style", "app-markup"]);
     grunt.registerTask("appDev", ["appDev-code", "app-i18n", "app-style", "app-markup"]);

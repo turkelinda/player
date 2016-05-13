@@ -44,7 +44,7 @@
         "i18next": false,
         "module": false,
         "require": false,
-        "promise": false,
+        "qwest": false,
         "sprintf": false,
         "htmlEncode": false,
         "IPC": false,

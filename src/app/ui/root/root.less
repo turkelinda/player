@@ -1,0 +1,23 @@
+@import "../../../../node_modules/msg-js-spa-framework/src/app/spa-fw";
+
+.___config.id___ {
+    .fluid();
+    @headerHeight: 40px;
+
+    .appHeaderCont{
+        height: @headerHeight;
+        width: 100%;
+        background-color: #00a0f2;
+        color: white;
+    }
+
+    .appMainCont {
+        .calcHeight(100% ~'-' @headerHeight);
+        height: calc(100% - 40px);
+        width: 100%;
+        padding: 10px 0;
+        background-color: #9dc1d3;
+        color: black;
+    }
+
+}
